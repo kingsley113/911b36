@@ -43,4 +43,27 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.patch("/markRead", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const { messages } = req.body;
+    messages.forEach(async (message) => {
+      await Message.update(
+        { read: true },
+        {
+          where: {
+            id: message.id,
+          },
+        }
+      );
+    });
+
+    res.json({ messages });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
