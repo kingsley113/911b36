@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { Input, Header, Messages } from './index';
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,6 +25,7 @@ const ActiveChat = ({
   conversations,
   activeConversation,
   postMessage,
+  updateConversations,
 }) => {
   const classes = useStyles();
 
@@ -36,6 +38,28 @@ const ActiveChat = ({
   const isConversation = (obj) => {
     return obj !== {} && obj !== undefined;
   };
+
+  const markMessagesAsRead = async (messages) => {
+    const unreadMessages = [];
+    messages.forEach((message) => {
+      if (!message.read && message.senderId !== user.id) {
+        unreadMessages.push(message);
+      }
+    });
+
+    if (unreadMessages.length > 0) {
+      const reqBody = { messages: unreadMessages };
+      const readMessages = await axios.patch('/api/messages/markRead', reqBody);
+      if (readMessages)
+        updateConversations(conversation, readMessages.data.messages);
+    }
+  };
+
+  useEffect(() => {
+    if (isConversation(conversation)) {
+      markMessagesAsRead(conversation.messages);
+    }
+  }, [conversation]);
 
   return (
     <Box className={classes.root}>
