@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import UnreadMsgBubble from './UnreadMsgBubble';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -8,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginLeft: 20,
     flexGrow: 1,
+    marginRight: 20,
   },
   username: {
     fontWeight: 'bold',
@@ -18,6 +20,15 @@ const useStyles = makeStyles((theme) => ({
     color: '#9CADC8',
     letterSpacing: -0.17,
   },
+  unreadText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    letterSpacing: -0.17,
+  },
+  unreadBubble: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 }));
 
 const ChatContent = ({ conversation, unreadCount }) => {
@@ -26,17 +37,23 @@ const ChatContent = ({ conversation, unreadCount }) => {
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
-  // TODO: add in style content and conditional logic to show bold and unread icon
   return (
     <Box className={classes.root}>
       <Box>
         <Typography className={classes.username}>
-          {otherUser.username} - Unread: {unreadCount}
+          {otherUser.username}
         </Typography>
-        <Typography className={classes.previewText}>
+        <Typography
+          className={unreadCount > 0 ? classes.unreadText : classes.previewText}
+        >
           {latestMessageText}
         </Typography>
       </Box>
+      {unreadCount > 0 ? (
+        <Box className={classes.unreadBubble}>
+          <UnreadMsgBubble unreadCount={unreadCount} />
+        </Box>
+      ) : null}
     </Box>
   );
 };
