@@ -49,7 +49,10 @@ const ActiveChat = ({
 
     if (unreadMessages.length > 0) {
       const reqBody = { messages: unreadMessages };
-      const readMessages = await axios.patch('/api/messages/markRead', reqBody);
+      const readMessages = await axios.patch(
+        '/api/messages/read-status',
+        reqBody
+      );
       if (readMessages)
         updateConversations(conversation, readMessages.data.messages);
     }
