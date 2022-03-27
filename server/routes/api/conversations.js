@@ -70,6 +70,10 @@ router.get("/", async (req, res, next) => {
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[0].text;
       conversations[i] = convoJSON;
+
+      convoJSON.unreadCount = conversations[i].messages.filter((message) => {
+        return !message.read && message.senderId === convoJSON.otherUser.id;
+      }).length;
     }
 
     res.json(conversations);
