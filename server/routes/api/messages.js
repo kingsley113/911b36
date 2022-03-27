@@ -56,8 +56,11 @@ router.patch("/read-status", async (req, res, next) => {
     });
 
     // Verify user is logged in and part of current conversation
-    if (!req.user || !Object.values(convoUsers).includes(req.user.id)) {
+    if (!req.user) {
       return res.sendStatus(401);
+    }
+    if (!Object.values(convoUsers).includes(req.user.id)) {
+      return res.sendStatus(403);
     }
 
     await Message.update(
