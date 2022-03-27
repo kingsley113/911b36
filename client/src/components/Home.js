@@ -121,27 +121,6 @@ const Home = ({ user, logout }) => {
     setActiveConversation(username);
   };
 
-  const updateConversations = (conversation, messages) => {
-    const updatedConvo = { ...conversation };
-    messages.forEach((newMessage) => {
-      updatedConvo.messages.forEach((message) => {
-        if (message.id === newMessage.id) {
-          message.read = true;
-        }
-      });
-    });
-
-    setConversations((prev) =>
-      prev.map((conversation) => {
-        if (conversation.id === updatedConvo.id) {
-          return updatedConvo;
-        } else {
-          return conversation;
-        }
-      })
-    );
-  };
-
   const addOnlineUser = useCallback((id) => {
     setConversations((prev) =>
       prev.map((convo) => {
@@ -212,7 +191,7 @@ const Home = ({ user, logout }) => {
     if (!user.isFetching) {
       fetchConversations();
     }
-  }, [user]);
+  }, [user, activeConversation]);
 
   const handleLogout = async () => {
     if (user && user.id) {
@@ -237,7 +216,6 @@ const Home = ({ user, logout }) => {
           conversations={conversations}
           user={user}
           postMessage={postMessage}
-          updateConversations={updateConversations}
         />
       </Grid>
     </>
