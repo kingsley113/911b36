@@ -71,7 +71,6 @@ router.get("/", async (req, res, next) => {
       convoJSON.latestMessageText = convoJSON.messages[0].text;
       conversations[i] = convoJSON;
 
-      // Reverse the message order to display in chonological order
       convoJSON.messages.reverse();
     }
 
