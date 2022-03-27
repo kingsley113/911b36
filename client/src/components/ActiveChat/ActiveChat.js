@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { Input, Header, Messages } from './index';
-import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,14 +36,6 @@ const ActiveChat = ({
   const isConversation = (obj) => {
     return obj !== {} && obj !== undefined;
   };
-
-  useEffect(async () => {
-    if (isConversation(conversation)) {
-      await axios.patch('/api/messages/read-status', {
-        conversationId: conversation.id,
-      });
-    }
-  }, [conversation]);
 
   return (
     <Box className={classes.root}>
