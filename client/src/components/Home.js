@@ -83,7 +83,9 @@ const Home = ({ user, logout }) => {
         prev.map((convo) => {
           if (convo.otherUser.id === recipientId) {
             const convoCopy = { ...convo };
-            convoCopy.messages.push(message);
+            const messagesCopy = [...convoCopy.messages];
+            messagesCopy.push(message);
+            convoCopy.messages = messagesCopy;
             convoCopy.latestMessageText = message.text;
             convoCopy.id = message.conversationId;
             return convoCopy;
@@ -115,8 +117,10 @@ const Home = ({ user, logout }) => {
           prev.map((convo) => {
             if (convo.id === message.conversationId) {
               const convoCopy = { ...convo };
+              const messagesCopy = [...convoCopy.messages];
+              messagesCopy.push(message);
+              convoCopy.messages = messagesCopy;
               convoCopy.latestMessageText = message.text;
-              convoCopy.messages.push(message);
               return convoCopy;
             } else {
               return convo;
