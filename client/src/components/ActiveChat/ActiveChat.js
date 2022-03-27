@@ -25,7 +25,6 @@ const ActiveChat = ({
   conversations,
   activeConversation,
   postMessage,
-  updateConversations,
 }) => {
   const classes = useStyles();
 
@@ -39,28 +38,11 @@ const ActiveChat = ({
     return obj !== {} && obj !== undefined;
   };
 
-  const markMessagesAsRead = async (messages) => {
-    const unreadMessages = [];
-    messages.forEach((message) => {
-      if (!message.read && message.senderId !== user.id) {
-        unreadMessages.push(message);
-      }
-    });
-
-    if (unreadMessages.length > 0) {
-      const reqBody = { messages: unreadMessages };
-      const readMessages = await axios.patch(
-        '/api/messages/read-status',
-        reqBody
-      );
-      if (readMessages)
-        updateConversations(conversation, readMessages.data.messages);
-    }
-  };
-
-  useEffect(() => {
+  useEffect(async () => {
     if (isConversation(conversation)) {
-      markMessagesAsRead(conversation.messages);
+      await axios.patch('/api/messages/read-status', {
+        conversationId: conversation.id,
+      });
     }
   }, [conversation]);
 
