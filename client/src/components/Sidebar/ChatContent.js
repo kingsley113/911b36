@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Badge, Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import UnreadMsgBubble from './UnreadMsgBubble';
+import { styled } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,27 +15,27 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     letterSpacing: -0.2,
   },
-  previewText: {
+  previewText: (props) => ({
     fontSize: 12,
-    color: '#9CADC8',
+    color: props.color,
+    fontWeight: props.fontWeight,
     letterSpacing: -0.17,
-  },
-  unreadText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    letterSpacing: -0.17,
-  },
-  unreadBubble: {
-    display: 'flex',
-    alignItems: 'center',
-  },
+  }),
 }));
 
 const ChatContent = ({ conversation }) => {
-  const classes = useStyles();
-
   const { otherUser, unreadCount } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
+
+  const styleProps =
+    unreadCount > 0 ? { fontWeight: 'bold' } : { color: '#9CADC8' };
+  const classes = useStyles(styleProps);
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      top: '50%',
+    },
+  }));
 
   return (
     <Box className={classes.root}>
@@ -43,17 +43,11 @@ const ChatContent = ({ conversation }) => {
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography
-          className={unreadCount > 0 ? classes.unreadText : classes.previewText}
-        >
+        <Typography className={classes.previewText}>
           {latestMessageText}
         </Typography>
       </Box>
-      {unreadCount > 0 ? (
-        <Box className={classes.unreadBubble}>
-          <UnreadMsgBubble unreadCount={unreadCount} />
-        </Box>
-      ) : null}
+      <StyledBadge badgeContent={unreadCount} color={'primary'}></StyledBadge>
     </Box>
   );
 };
