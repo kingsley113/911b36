@@ -27,22 +27,6 @@ const Chat = ({ conversation, setActiveChat }) => {
     await setActiveChat(conversation.otherUser.username);
   };
 
-  const calcUnreadMessages = () => {
-    const unreadMessages = [];
-    conversation.messages.forEach((message) => {
-      if (!message.read && message.senderId === conversation.otherUser.id) {
-        unreadMessages.push(message);
-      }
-    });
-    return unreadMessages.length;
-  };
-
-  useEffect(() => {
-    if (conversation) {
-      setUnreadCount(calcUnreadMessages());
-    }
-  }, [conversation]);
-
   return (
     <Box onClick={() => handleClick(conversation)} className={classes.root}>
       <BadgeAvatar
@@ -51,7 +35,7 @@ const Chat = ({ conversation, setActiveChat }) => {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} unreadCount={unreadCount} />
+      <ChatContent conversation={conversation} />
     </Box>
   );
 };
