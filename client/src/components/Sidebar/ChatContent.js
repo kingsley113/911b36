@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatContent = ({ conversation, unreadCount }) => {
+const ChatContent = ({ conversation }) => {
   const classes = useStyles();
 
-  const { otherUser } = conversation;
+  const { otherUser, unreadCount } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
   return (
