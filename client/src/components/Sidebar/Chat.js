@@ -28,7 +28,7 @@ const Chat = ({ conversation, setActiveChat, updateConversations }) => {
       const response = await axios.patch('/api/messages/read-status', {
         conversationId: conversation.id,
       });
-      if (response.status === 200) updateConversations();
+      if (response.status === 204) updateConversations();
     }
   };
 

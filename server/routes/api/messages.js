@@ -71,7 +71,7 @@ router.patch("/read-status", async (req, res, next) => {
       }
     );
 
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
