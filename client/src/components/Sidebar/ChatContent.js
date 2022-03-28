@@ -1,30 +1,41 @@
-import React from "react";
-import { Box, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { Badge, Box, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
     marginLeft: 20,
     flexGrow: 1,
+    marginRight: 20,
   },
   username: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     letterSpacing: -0.2,
   },
-  previewText: {
+  previewText: (props) => ({
     fontSize: 12,
-    color: "#9CADC8",
+    color: props.color,
+    fontWeight: props.fontWeight,
     letterSpacing: -0.17,
-  },
+  }),
 }));
 
 const ChatContent = ({ conversation }) => {
-  const classes = useStyles();
-
-  const { otherUser } = conversation;
+  const { otherUser, unreadCount } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
+
+  const styleProps =
+    unreadCount > 0 ? { fontWeight: 'bold' } : { color: '#9CADC8' };
+  const classes = useStyles(styleProps);
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      top: '50%',
+    },
+  }));
 
   return (
     <Box className={classes.root}>
@@ -36,6 +47,7 @@ const ChatContent = ({ conversation }) => {
           {latestMessageText}
         </Typography>
       </Box>
+      <StyledBadge badgeContent={unreadCount} color={'primary'}></StyledBadge>
     </Box>
   );
 };

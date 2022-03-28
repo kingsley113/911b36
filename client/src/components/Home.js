@@ -72,6 +72,7 @@ const Home = ({ user, logout }) => {
       }
 
       sendMessage(data, body);
+      updateConversations();
     } catch (error) {
       console.error(error);
     }
@@ -136,6 +137,15 @@ const Home = ({ user, logout }) => {
     setActiveConversation(username);
   };
 
+  const updateConversations = async () => {
+    try {
+      const { data } = await axios.get('/api/conversations');
+      setConversations(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addOnlineUser = useCallback((id) => {
     setConversations((prev) =>
       prev.map((convo) => {
@@ -197,8 +207,7 @@ const Home = ({ user, logout }) => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const { data } = await axios.get('/api/conversations');
-        setConversations(data);
+        updateConversations();
       } catch (error) {
         console.error(error);
       }
@@ -225,6 +234,7 @@ const Home = ({ user, logout }) => {
           clearSearchedUsers={clearSearchedUsers}
           addSearchedUsers={addSearchedUsers}
           setActiveChat={setActiveChat}
+          updateConversations={updateConversations}
         />
         <ActiveChat
           activeConversation={activeConversation}

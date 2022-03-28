@@ -72,6 +72,21 @@ router.get("/", async (req, res, next) => {
       conversations[i] = convoJSON;
 
       convoJSON.messages.reverse();
+
+      convoJSON.unreadCount = conversations[i].messages.filter((message) => {
+        return !message.read && message.senderId === convoJSON.otherUser.id;
+      }).length;
+
+      // last read message - loop from newest first only until first read message is found then mark message
+      const sentMessages = convoJSON.messages.filter(
+        (message) => message.senderId === req.user.id
+      );
+      for (let i = sentMessages.length - 1; i >= 0; i--) {
+        if (sentMessages[i].read === true) {
+          sentMessages[i].lastReadMessage = true;
+          break;
+        }
+      }
     }
 
     res.json(conversations);

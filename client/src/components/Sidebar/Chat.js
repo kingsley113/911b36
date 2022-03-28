@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import { BadgeAvatar, ChatContent } from '../Sidebar';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,12 +18,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Chat = ({ conversation, setActiveChat }) => {
+const Chat = ({ conversation, setActiveChat, updateConversations }) => {
   const classes = useStyles();
   const { otherUser } = conversation;
 
   const handleClick = async (conversation) => {
     await setActiveChat(conversation.otherUser.username);
+    if (conversation.id) {
+      const response = await axios.patch('/api/messages/read-status', {
+        conversationId: conversation.id,
+      });
+      if (response.status === 204) updateConversations();
+    }
   };
 
   return (
