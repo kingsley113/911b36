@@ -71,6 +71,8 @@ router.get("/", async (req, res, next) => {
       convoJSON.latestMessageText = convoJSON.messages[0].text;
       conversations[i] = convoJSON;
 
+      convoJSON.messages.reverse();
+
       convoJSON.unreadCount = conversations[i].messages.filter((message) => {
         return !message.read && message.senderId === convoJSON.otherUser.id;
       }).length;
