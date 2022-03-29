@@ -4,14 +4,13 @@ const Message = require("./message");
 
 // associations
 
-User.hasMany(Conversation);
-Conversation.belongsTo(User, { as: "user1" });
-Conversation.belongsTo(User, { as: "user2" });
+Conversation.belongsToMany(User, { through: "Conversation_Users" });
+User.belongsToMany(Conversation, { through: "Conversation_Users" });
 Message.belongsTo(Conversation);
 Conversation.hasMany(Message);
 
 module.exports = {
   User,
   Conversation,
-  Message
+  Message,
 };
